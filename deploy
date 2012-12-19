@@ -13,4 +13,4 @@ mv dist/* .
 rm -fr temp .sass-cache dist
 git add .
 git commit -m "Deploying $version"
-git push origin master
+git push --tags origin master
