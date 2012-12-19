@@ -1,0 +1,16 @@
+version=$1
+if [[ $version == "" ]]; then
+  major=0
+  minor=0
+  patch=$(git describe --tags | cut -d '.' -f3)
+  patch=$((patch+1))
+  version=v$major.$minor.$patch
+fi
+git tag -a $version -m "$version"
+git checkout master
+rm dist/dist
+mv dist/* .
+rm -fr temp .sass-cache dist
+git add .
+git commit -m "Deploying $version"
+git push origin master
