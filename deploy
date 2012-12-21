@@ -2,7 +2,7 @@ version=$1
 if [[ $version == "" ]]; then
   major=0
   minor=0
-  patch=$(git describe --tags | cut -d '.' -f3)
+  patch=$(git tag -l | tail -1 | cut -d '.' -f3)
   patch=$((patch+1))
   version=v$major.$minor.$patch
 fi
