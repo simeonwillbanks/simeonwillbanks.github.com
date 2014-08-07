@@ -27,6 +27,12 @@ h6,
   text-align: center;
 }
 
+.navbar,
+.navbar .dropdown-menu > li > a,
+.navbar .dropdown-menu > li > a:focus {
+  font-size: 15px;
+}
+
 .navbar-inverse {
   background-color: #ffffff;
   border-color: #e6e6e6;
@@ -152,7 +158,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 
 .picture {
   height: 200px;
-  background-color: #eee;
+  background-color: #fafafa;
   background-repeat: no-repeat;
   background-position: center center
 }
