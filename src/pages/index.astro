@@ -1,0 +1,26 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+---
+
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header title={SITE_TITLE} />
+		<main>
+			<h1>👋 My name is Simeon Willbanks</h1>
+			<p>
+				I'm a software engineer, friend, brother, son, father and husband. I thrive on code, soccer, photography, good music, the great outdoors, world travel, delicious food and beer. My home is San Clemente, California.
+			</p>
+			<p>
+				<em>Thank you for visiting!</em>
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
