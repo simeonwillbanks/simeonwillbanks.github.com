@@ -40,9 +40,7 @@
     }
 
     .box {
-      transition: transform 0.3s ease, grid-column 0.5s ease, grid-row 0.5s ease, background-color 0.5s ease, opacity 0.5s ease;
-      grid-column: span 3;
-      grid-row: span 3;
+      transition: transform 0.3s ease, grid-column 0.6s ease, grid-row 0.6s ease, background-color 0.6s ease, opacity 0.6s ease;
       background-color: #d0d0d0;
       opacity: 0.5;
     }
@@ -51,19 +49,6 @@
       transform: scale(1.05);
       z-index: 1;
     }
-
-    .box-1.revealed { grid-column: 1 / 4; grid-row: 1 / 5; }
-    .box-2.revealed { grid-column: 4 / 9; grid-row: 1 / 4; }
-    .box-3.revealed { grid-column: 9 / 13; grid-row: 1 / 6; }
-    .box-4.revealed { grid-column: 4 / 6; grid-row: 4 / 7; }
-    .box-5.revealed { grid-column: 6 / 9; grid-row: 4 / 8; }
-    .box-6.revealed { grid-column: 1 / 5; grid-row: 5 / 7; }
-    .box-7.revealed { grid-column: 9 / 13; grid-row: 6 / 10; }
-    .box-8.revealed { grid-column: 1 / 4; grid-row: 7 / 10; }
-    .box-9.revealed { grid-column: 4 / 9; grid-row: 8 / 10; }
-    .box-10.revealed { grid-column: 1 / 5; grid-row: 10 / 13; }
-    .box-11.revealed { grid-column: 5 / 9; grid-row: 10 / 13; }
-    .box-12.revealed { grid-column: 9 / 13; grid-row: 10 / 13; }
 
     .site-name {
       font-size: 1.5rem;
@@ -123,20 +108,7 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="box box-1"></div>
-    <div class="box box-2"></div>
-    <div class="box box-3"></div>
-    <div class="box box-4"></div>
-    <div class="box box-5"></div>
-    <div class="box box-6"></div>
-    <div class="box box-7"></div>
-    <div class="box box-8"></div>
-    <div class="box box-9"></div>
-    <div class="box box-10"></div>
-    <div class="box box-11"></div>
-    <div class="box box-12"></div>
-  </div>
+  <div class="container" id="container"></div>
   <h1 class="site-name">simeons.net</h1>
   <nav class="menu">
     <a href="https://linkedin.com/in/simeonwillbanks" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -167,7 +139,7 @@
       return Math.abs(hash);
     }
 
-    // Base color palette - will be shuffled
+    // Base color palette
     const basePalette = [
       '#E63946', '#457B9D', '#E9C46A', '#2A9D8F',
       '#264653', '#F4A261', '#A8DADC', '#1D3557',
@@ -184,6 +156,73 @@
       return shuffled;
     }
 
+    // Generate random grid layout that fills 12x12 grid
+    function generateGridLayout(random) {
+      const gridSize = 12;
+      const grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(false));
+      const boxes = [];
+      const minSize = 2;
+      const maxSize = 5;
+
+      function canPlace(startRow, startCol, height, width) {
+        if (startRow + height > gridSize || startCol + width > gridSize) return false;
+        for (let r = startRow; r < startRow + height; r++) {
+          for (let c = startCol; c < startCol + width; c++) {
+            if (grid[r][c]) return false;
+          }
+        }
+        return true;
+      }
+
+      function place(startRow, startCol, height, width) {
+        for (let r = startRow; r < startRow + height; r++) {
+          for (let c = startCol; c < startCol + width; c++) {
+            grid[r][c] = true;
+          }
+        }
+        boxes.push({
+          colStart: startCol + 1,
+          colEnd: startCol + width + 1,
+          rowStart: startRow + 1,
+          rowEnd: startRow + height + 1
+        });
+      }
+
+      // Fill the grid
+      for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+          if (grid[row][col]) continue;
+
+          // Try random sizes, prefer larger
+          const sizes = [];
+          for (let h = maxSize; h >= minSize; h--) {
+            for (let w = maxSize; w >= minSize; w--) {
+              if (canPlace(row, col, h, w)) {
+                sizes.push({ h, w });
+              }
+            }
+          }
+
+          if (sizes.length > 0) {
+            // Pick a random size from available options, weighted toward larger
+            const idx = Math.floor(random() * Math.min(sizes.length, 4));
+            const { h, w } = sizes[idx];
+            place(row, col, h, w);
+          } else {
+            // Fill remaining small cells
+            let h = 1, w = 1;
+            while (row + h < gridSize && !grid[row + h][col]) h++;
+            while (col + w < gridSize && canPlace(row, col, h, w + 1)) w++;
+            if (canPlace(row, col, h, w)) {
+              place(row, col, h, w);
+            }
+          }
+        }
+      }
+
+      return boxes;
+    }
+
     // Generate random opacity between 0.75 and 1.0
     function randomOpacity(random) {
       return 0.75 + (random() * 0.25);
@@ -193,15 +232,47 @@
       const seed = getDateSeed();
       const random = mulberry32(seed);
       const colors = shuffleArray(basePalette, random);
-      const boxes = document.querySelectorAll('.box');
+      const layout = generateGridLayout(random);
+      const container = document.getElementById('container');
       const delay = 150;
 
-      boxes.forEach((box, index) => {
+      // Create initial uniform boxes (4x4 grid of 3x3 boxes)
+      const initialBoxes = [];
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+          const box = document.createElement('div');
+          box.className = 'box';
+          box.style.gridColumn = `${col * 3 + 1} / ${col * 3 + 4}`;
+          box.style.gridRow = `${row * 3 + 1} / ${row * 3 + 4}`;
+          container.appendChild(box);
+          initialBoxes.push(box);
+        }
+      }
+
+      // Remove extra initial boxes if layout has fewer, or add if more
+      while (initialBoxes.length > layout.length) {
+        const removed = initialBoxes.pop();
+        removed.remove();
+      }
+      while (initialBoxes.length < layout.length) {
+        const box = document.createElement('div');
+        box.className = 'box';
+        box.style.gridColumn = '1 / 4';
+        box.style.gridRow = '1 / 4';
+        box.style.opacity = '0';
+        container.appendChild(box);
+        initialBoxes.push(box);
+      }
+
+      // Animate to final layout
+      initialBoxes.forEach((box, index) => {
+        const target = layout[index];
         const color = colors[index % colors.length];
         const opacity = randomOpacity(random);
 
         setTimeout(() => {
-          box.classList.add('revealed');
+          box.style.gridColumn = `${target.colStart} / ${target.colEnd}`;
+          box.style.gridRow = `${target.rowStart} / ${target.rowEnd}`;
           box.style.backgroundColor = color;
           box.style.opacity = opacity;
         }, delay * (index + 1));
