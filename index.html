@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>simeons.net</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif' font-weight='500'>s</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      aspect-ratio: 1;
+      border: 2px solid #1a1a1a;
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: #fff;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+    }
+
+    .box {
+      transition: transform 0.3s ease;
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+      z-index: 1;
+    }
+
+    /* Box 1 - red, spans 3 cols, 4 rows */
+    .box-1 {
+      grid-column: 1 / 4;
+      grid-row: 1 / 5;
+      background-color: #E63946;
+      opacity: 0.85;
+    }
+
+    /* Box 2 - blue, spans 5 cols, 3 rows */
+    .box-2 {
+      grid-column: 4 / 9;
+      grid-row: 1 / 4;
+      background-color: #457B9D;
+      opacity: 0.9;
+    }
+
+    /* Box 3 - yellow, spans 4 cols, 5 rows */
+    .box-3 {
+      grid-column: 9 / 13;
+      grid-row: 1 / 6;
+      background-color: #E9C46A;
+      opacity: 0.8;
+    }
+
+    /* Box 4 - teal, spans 2 cols, 3 rows */
+    .box-4 {
+      grid-column: 4 / 6;
+      grid-row: 4 / 7;
+      background-color: #2A9D8F;
+      opacity: 0.9;
+    }
+
+    /* Box 5 - dark blue, spans 3 cols, 4 rows */
+    .box-5 {
+      grid-column: 6 / 9;
+      grid-row: 4 / 8;
+      background-color: #264653;
+      opacity: 0.85;
+    }
+
+    /* Box 6 - orange, spans 4 cols, 2 rows */
+    .box-6 {
+      grid-column: 1 / 5;
+      grid-row: 5 / 7;
+      background-color: #F4A261;
+      opacity: 0.9;
+    }
+
+    /* Box 7 - light blue, spans 4 cols, 4 rows */
+    .box-7 {
+      grid-column: 9 / 13;
+      grid-row: 6 / 10;
+      background-color: #A8DADC;
+      opacity: 0.85;
+    }
+
+    /* Box 8 - navy, spans 3 cols, 3 rows */
+    .box-8 {
+      grid-column: 1 / 4;
+      grid-row: 7 / 10;
+      background-color: #1D3557;
+      opacity: 0.9;
+    }
+
+    /* Box 9 - red variant, spans 5 cols, 2 rows */
+    .box-9 {
+      grid-column: 4 / 9;
+      grid-row: 8 / 10;
+      background-color: #E63946;
+      opacity: 0.75;
+    }
+
+    /* Box 10 - teal, spans 4 cols, 3 rows */
+    .box-10 {
+      grid-column: 1 / 5;
+      grid-row: 10 / 13;
+      background-color: #2A9D8F;
+      opacity: 0.8;
+    }
+
+    /* Box 11 - blue, spans 4 cols, 3 rows */
+    .box-11 {
+      grid-column: 5 / 9;
+      grid-row: 10 / 13;
+      background-color: #457B9D;
+      opacity: 0.85;
+    }
+
+    /* Box 12 - yellow, spans 4 cols, 3 rows */
+    .box-12 {
+      grid-column: 9 / 13;
+      grid-row: 10 / 13;
+      background-color: #E9C46A;
+      opacity: 0.9;
+    }
+
+    .site-name {
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+
+    .menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .menu a {
+      color: #666;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: lowercase;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: #1a1a1a;
+      transition: width 0.2s ease;
+    }
+
+    .menu a:hover {
+      color: #1a1a1a;
+    }
+
+    .menu a:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1.5rem;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .menu {
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box box-1"></div>
+    <div class="box box-2"></div>
+    <div class="box box-3"></div>
+    <div class="box box-4"></div>
+    <div class="box box-5"></div>
+    <div class="box box-6"></div>
+    <div class="box box-7"></div>
+    <div class="box box-8"></div>
+    <div class="box box-9"></div>
+    <div class="box box-10"></div>
+    <div class="box box-11"></div>
+    <div class="box box-12"></div>
+  </div>
+  <h1 class="site-name">simeons.net</h1>
+  <nav class="menu">
+    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">linkedin</a>
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer">github</a>
+    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">twitter</a>
+  </nav>
+</body>
+</html>
