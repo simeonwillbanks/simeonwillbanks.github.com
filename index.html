@@ -169,11 +169,11 @@
       return { h: h * 360, s: s * 100, l: l * 100 };
     }
 
-    // Get lightness offset based on current minute (-8 to +8)
+    // Get lightness offset based on current minute (-20 to +20)
     function getMinuteLightnessOffset() {
       const minute = new Date().getMinutes();
-      // Map 0-59 to -8 to +8 (oscillates: darker at 0, lighter at 30, darker at 59)
-      return Math.sin((minute / 60) * Math.PI * 2) * 8;
+      // Map 0-59 to -20 to +20 (oscillates: darker at 0, lighter at 30, darker at 59)
+      return Math.sin((minute / 60) * Math.PI * 2) * 20;
     }
 
     // Apply lightness offset to a hex color
@@ -323,4 +323,3 @@
 </body>
 
 </html>
-
